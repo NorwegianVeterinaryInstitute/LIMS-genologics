@@ -654,7 +654,7 @@ class Lims(object):
         for k, v in udf.items():
             ElementTree.SubElement(root, 'udf:field',
                     {'xmlns:udf': 'http://genologics.com/ri/userdefined', 'name': k}
-                    ).text = str(v)
+                    ).text = v if isinstance(v, basestring) else str(v) # TODO: Python 3 compat
         if open_date:
             ElementTree.SubElement(root, 'open-date').text = str(open_date)
         xml_data = self.tostring(ElementTree.ElementTree(root))
