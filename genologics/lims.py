@@ -500,7 +500,7 @@ class Lims(object):
                 results.append(klass(self, uri=node.attrib['uri']))
                 info_dict = {}
                 for attrib_key in node.attrib:
-                    info_dict[attrib_key] = node.attrib['uri']
+                    info_dict[attrib_key] = node.attrib[attrib_key]
                 for subnode in node:
                     info_dict[subnode.tag] = subnode.text
                 additionnal_info_dicts.append(info_dict)
