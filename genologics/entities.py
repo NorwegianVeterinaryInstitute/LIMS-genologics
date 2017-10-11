@@ -1153,14 +1153,6 @@ class ReagentType(Entity):
         return None
 
 
-class Queue(Entity):
-    """Queue of a given step"""
-    _URI = "queues"
-    _TAG= "queue"
-    _PREFIX = "que"
-
-    artifacts=NestedEntityListDescriptor("artifact", Artifact, "artifacts")
-
 Sample.artifact          = EntityDescriptor('artifact', Artifact)
 StepActions.step         = EntityDescriptor('step', Step)
 Stage.workflow           = EntityDescriptor('workflow', Workflow)
