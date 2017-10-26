@@ -1013,6 +1013,7 @@ class ReagentLot(Entity):
     last_modified_by   = EntityDescriptor('last-modified-by', Researcher)
     status             = StringDescriptor('status')
     usage_count        = IntegerDescriptor('usage-count')
+    notes              = StringDescriptor('notes')
 
 
 class StepReagentLots(Entity):
