@@ -362,6 +362,7 @@ class Researcher(Entity):
     fax         = StringDescriptor('fax')
     email       = StringDescriptor('email')
     initials    = StringDescriptor('initials')
+    username    = StringDescriptor('credentials/username')
     lab         = EntityDescriptor('lab', Lab)
     udf         = UdfDictionaryDescriptor()
     udt         = UdtDictionaryDescriptor()
