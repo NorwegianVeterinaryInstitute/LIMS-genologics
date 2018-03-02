@@ -15,7 +15,7 @@ except ImportError:
 
 import datetime
 import time
-from collections import MutableSet
+from collections import MutableSet, MutableMapping
 from xml.etree import ElementTree
 
 import logging
@@ -646,6 +646,79 @@ class ReagentLabelSetDescriptor(BaseDescriptor):
     def __get__(self, instance, cls):
         instance.get()
         return ReagentLabelSet(instance.root)
+
+
+class OutputToReagentMap(MutableMapping):
+    """Represents an XML tree containing a list of <output> tags, each
+    containing a single <reagent-label>. This is used for the Reagents 
+    subentity, under Step. This container-like object appears as a 
+    dictionary, with keys equal to the artifacts (outputs) and values
+    as strings that give the name of the reagent (typically index).
+
+    When no reagent label is assigned to an output, i.e. there is no 
+    <reagent-label> tag, the output is included in this mapping with a
+    value None.
+    
+    The protocol supports multiple reagents per output, but the UI does
+    not, so only a single reagent per output is supported by this class."""
+
+    def __init__(self, lims, base_element):
+        self.base_element = base_element
+        self.lims = lims
+        self.value = dict()
+        for node in self.base_element.findall('output'):
+            if 'uri' in node.attrib:
+                from genologics.entities import Artifact, Process
+                artifact = Artifact(self.lims, node.attrib['uri'])
+                for reagent_label in node.findall('reagent-label'):
+                    self.value[artifact] = reagent_label.attrib['name']
+                    break # Only supports a single reagent label
+                else:
+                    self.value[artifact] = None
+
+    def __contains__(self, artifact): return artifact in self.value
+
+    def __iter__(self): return self.value.__iter__()
+
+    def __len__(self): return len(self.value)
+
+    def __getitem__(self, artifact): return self.value[artifact]
+
+    def __setitem__(self, artifact, reagent_name):
+        if artifact in self.value:
+            for node in self.base_element.findall('output'):
+                if node.attrib.get('uri') == artifact.uri:
+                    node.clear()
+                    ElementTree.SubElement(
+                            node,
+                            'reagent-label',
+                            {'name': reagent_name}
+                            )
+        else:
+            raise IndexError(
+                    "The specified key {0} is not a valid output of this step.".format(artifact)
+                    )
+        self.value[artifact] = reagent_name
+
+    def __delitem__(self, artifact):
+        raise RuntimeError("Item deletion is not supported in {0}.".format(type(self)))
+
+    def __str__(self):
+        return str(self.value)
+
+
+class OutputToReagentMapDescriptor(TagDescriptor):
+    """Descriptor for output->reagent mapping (steps/../reagents endpoint)."""
+
+    def __init__(self, tag):
+        super(OutputToReagentMapDescriptor, self).__init__(tag)
+
+    def __get__(self, instance, cls):
+        instance.get()
+        return OutputToReagentMap(
+                instance.lims,
+                instance.root.find(self.tag)
+                )
 
 
 class InputOutputMapList(BaseDescriptor):

@@ -11,7 +11,7 @@ from genologics.descriptors import StringDescriptor, StringDictionaryDescriptor,
     UdtDictionaryDescriptor, ExternalidListDescriptor, EntityDescriptor, BooleanDescriptor, EntityListDescriptor, \
     StringAttributeDescriptor, StringTagAttributeDescriptor, StringListDescriptor, DimensionDescriptor, IntegerDescriptor, \
     PlacementDictionaryDescriptor, InputOutputMapList, LocationDescriptor, NestedEntityListDescriptor, \
-    ReagentLabelSetDescriptor, EntityAttributeDescriptor, ObjectListDescriptor, InlineEntityListDescriptor,\
+    ReagentLabelSetDescriptor, OutputToReagentMapDescriptor, EntityAttributeDescriptor, ObjectListDescriptor, InlineEntityListDescriptor,\
     NestedStringListDescriptor, NestedAttributeListDescriptor, IntegerAttributeDescriptor,\
     StringTagAttributeDescriptor
 
@@ -1038,6 +1038,18 @@ class StepReagentLots(Entity):
             reagent_lots_elem.append(node)
         self.put()
 
+
+class StepReagents(Entity):
+    """Step reagents subentity. Used for indexes."""
+
+    reagent_category    = StringDescriptor('reagent-category')
+    output_reagents     = OutputToReagentMapDescriptor('output-reagents')
+
+    def post(self):
+        data = self.lims.tostring(ElementTree.ElementTree(self.root))
+        self.lims.post(uri=self.uri, data=data)
+
+
 class StepDetails(Entity):
     """Detail associated with a step"""
 
@@ -1056,6 +1068,7 @@ class Step(Entity):
     placements    = EntityDescriptor('placements', StepPlacements)
     details       = EntityDescriptor('details', StepDetails)
     _reagent_lots = EntityDescriptor('reagent-lots', StepReagentLots)
+    reagents      = EntityDescriptor('reagents', StepReagents)
     pools               = EntityDescriptor('pools', StepPools)
     program_status      = EntityDescriptor('program-status', ProgramStatus)
     available_programs  = InlineEntityListDescriptor('available-program', AvailableProgram, 'available-programs')
