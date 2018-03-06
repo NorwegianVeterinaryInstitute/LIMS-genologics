@@ -688,7 +688,8 @@ class OutputToReagentMap(MutableMapping):
         if artifact in self.value:
             for node in self.base_element.findall('output'):
                 if node.attrib.get('uri') == artifact.uri:
-                    node.clear()
+                    for child in list(node.findall('reagent-label')):
+                        node.remove(child)
                     ElementTree.SubElement(
                             node,
                             'reagent-label',
