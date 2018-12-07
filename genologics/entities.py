@@ -1169,8 +1169,8 @@ class ReagentType(Entity):
 
 
 Sample.artifact          = EntityDescriptor('artifact', Artifact)
+Sample.control_type      = EntityDescriptor('control-type', ControlType)
 StepActions.step         = EntityDescriptor('step', Step)
 Stage.workflow           = EntityDescriptor('workflow', Workflow)
 Artifact.workflow_stages = NestedEntityListDescriptor('workflow-stage', Stage, 'workflow-stages')
 Step.configuration       = EntityDescriptor('configuration', ProtocolStep)
-
