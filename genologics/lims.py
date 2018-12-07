@@ -633,7 +633,7 @@ class Lims(object):
         if expiry_date:
             ElementTree.SubElement(root, 'expiry-date').text = expiry_date
         if storage_location:
-            ElementTree.SubElement(root, 'storage_location').text = storage_location
+            ElementTree.SubElement(root, 'storage-location').text = storage_location
         if notes:
             ElementTree.SubElement(root, 'notes').text = notes
         if status:
