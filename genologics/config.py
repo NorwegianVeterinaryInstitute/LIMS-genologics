@@ -46,7 +46,7 @@ def load_config(specified_config = None):
         config = configparser.SafeConfigParser()
         try:
             conf_file = config.read([os.path.expanduser('~/.genologicsrc'), '.genologicsrc',
-                        'genologics.conf', 'genologics.cfg', '/etc/genologics.conf'])
+                        'genologics.conf', 'genologics.cfg', '/etc/genologics.conf', '/opt/gls/clarity/customextensions/genologics/genologics.conf'])
 
             # First config file found wins
             config_file = conf_file[0]
