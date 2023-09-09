@@ -12,6 +12,7 @@ Supported python versions :
 2.7 (recommended)
 3.4
 3.5
+3.6 (verified working by NVI)
 
 ### Design
 
@@ -31,14 +32,16 @@ instance to the database.
 
 ### Installation
 
+For the original package from SciLifeLab
+
 ```
 pip install genologics
 ```
 
-or for the cutting edge version:
+or for NVIs version:
 
 ```
-pip install https://github.com/SciLifeLab/genologics/tarball/master
+pip install https://github.com/NorwegianVeterinaryInstitute/LIMS-genologics/tarball/master
 ```
 
 ### Usage
@@ -48,6 +51,12 @@ of those config files (ordered by preference):
 
 ```
 $HOME/.genologicsrc, .genologicsrc, genologics.conf, genologics.cfg
+```
+
+For the NVI server install:
+
+```
+/opt/gls/clarity/customextensions/genologics/genologics.conf
 ```
 
 or if installed system_wide:
@@ -88,3 +97,6 @@ Pull requests are welcome, and will be tested internally before merging. Be awar
   It is not entirely clear how to deal with this in the Lims.cache:
   Currently, an artifact that has the current state may be represented
   by a URL that includes the state, and another that does not contain it.
+
+### NVI version features
+- More info coming soon
